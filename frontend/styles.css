@@ -7,7 +7,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f7f6;
+  background-color: #424242;
   color: #333;
   display: flex;
   justify-content: center;
@@ -19,7 +19,7 @@ body {
   width: 90%;
   max-width: 900px;
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffffef;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -87,7 +87,7 @@ tr:nth-child(even) {
 }
 
 #total-amount {
-  font-size: 18px;
+  font-size: 26px;
   font-weight: bold;
   color: #333;
   margin-top: 20px;

@@ -35,7 +35,7 @@ const Saving = mongoose.model("Saving", SavingSchema);
 // POST: Add Amount
 app.post("/api/savings", async (req, res) => {
   try {
-    console.log("POST /api/savings - Request Body:", req.body);
+    // console.log("POST /api/savings - Request Body:", req.body);
     const { amount } = req.body;
 
     if (!amount || isNaN(amount)) {
@@ -54,7 +54,7 @@ app.post("/api/savings", async (req, res) => {
     });
 
     const savedData = await saving.save();
-    console.log("Amount saved successfully:", savedData);
+    // console.log("Amount saved successfully:", savedData);
     res.status(201).json({ message: "Amount added successfully." });
   } catch (error) {
     console.error("Error in POST /api/savings:", error.message);
@@ -65,9 +65,9 @@ app.post("/api/savings", async (req, res) => {
 // GET: Fetch Savings
 app.get("/api/savings", async (req, res) => {
   try {
-    console.log("GET /api/savings - Fetching all savings");
+    // console.log("GET /api/savings - Fetching all savings");
     const savings = await Saving.find();
-    console.log("Savings data fetched:", savings);
+    // console.log("Savings data fetched:", savings);
     res.json(savings);
   } catch (error) {
     console.error("Error in GET /api/savings:", error.message);
