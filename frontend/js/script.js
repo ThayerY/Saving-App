@@ -156,7 +156,8 @@ const editSavingInline = (button) => {
 
   const timeInput = document.createElement("input");
   timeInput.type = "time";
-  timeInput.value = moment(timeCell.textContent.trim(), "h:mm A").format("HH:mm");
+  // timeInput.value = moment(timeCell.textContent.trim(), "h:mm A").format("HH:mm");
+  timeInput.value = convertTo12(timeCell.textContent.trim());
   timeInput.className = "edit-time-input";
 
   // Replace cell content with input fields
@@ -189,7 +190,8 @@ const editSavingInline = (button) => {
     }
 
     // Ensure time is sent in 12-hour format
-    const formattedTime = moment(newTime, "HH:mm").format("h:mm A");
+    // const formattedTime = moment(newTime, "HH:mm").format("h:mm A");
+    const formattedTime = convertTo12(newTime);
 
     try {
       const response = await fetch(`${apiUrl}/${id}`, {
