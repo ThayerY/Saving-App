@@ -1,214 +1,92 @@
-// export const editSaving = async (id, currentAmount, apiUrl, fetchSavings, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners) => {
-//   const newAmount = parseFloat(prompt(`Edit amount (current: ${currentAmount}):`, currentAmount));
+// Edit a saving entry inline within the table
+const editSavingInline = async (button) => {
+  const id = button.dataset.id; // Get the saving ID
+  const row = button.closest("tr"); // Get the row containing the button
 
-//   if (isNaN(newAmount) || newAmount <= 0) {
-//     alert("Please enter a valid amount!");
-//     return;
-//   }
+  // Get current values from the row
+  const amountCell = row.children[0];
+  const dateCell = row.children[3];
+  const todayCell = row.children[4];
+  const timeCell = row.children[5];
 
-//   try {
-//     const response = await fetch(`${apiUrl}/${id}`, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ amount: newAmount }),
-//     });
+  // Create input fields for editing
+  const amountInput = document.createElement("input");
+  amountInput.type = "number";
+  amountInput.value = amountCell.textContent.trim();
+  amountInput.className = "edit-input";
 
-//     if (response.ok) {
-//       console.log(`Successfully updated saving with ID: ${id}`);
-//       fetchSavings(apiUrl, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners);
-//     } else {
-//       alert("Failed to update the entry.");
-//     }
-//   } catch (error) {
-//     console.error("Error updating entry:", error);
-//     alert("Error updating entry.");
-//   }
-// };
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  dateInput.value = dateCell.textContent.trim();
+  dateInput.className = "edit-date-input";
 
+  const todayInput = document.createElement("input");
+  todayInput.type = "text";
+  todayInput.value = todayCell.textContent.trim();
+  todayInput.className = "edit-today-input";
 
+  const timeInput = document.createElement("input");
+  timeInput.type = "time";
+  timeInput.value = moment(timeCell.textContent.trim(), "h:mm A").format("HH:mm");
+  timeInput.className = "edit-time-input";
 
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
+  // Replace cell content with input fields
+  amountCell.innerHTML = "";
+  dateCell.innerHTML = "";
+  todayCell.innerHTML = "";
+  timeCell.innerHTML = "";
 
+  amountCell.appendChild(amountInput);
+  dateCell.appendChild(dateInput);
+  todayCell.appendChild(todayInput);
+  timeCell.appendChild(timeInput);
 
+  // Change the Edit button to a Save button
+  const saveBtn = document.createElement("button");
+  saveBtn.textContent = "Save";
+  saveBtn.className = "save-btn";
+  button.replaceWith(saveBtn);
 
+  // Add event listener to Save button
+  saveBtn.addEventListener("click", async () => {
+    const newAmount = parseFloat(amountInput.value);
+    const newDate = dateInput.value;
+    const newToday = todayInput.value;
+    const newTime = timeInput.value;
 
-
-
-// export const editSaving = async (id, currentAmount, apiUrl, fetchSavings, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners) => {
-//   const newAmount = parseFloat(prompt(`Edit amount (current: ${currentAmount}):`, currentAmount));
-
-//   if (isNaN(newAmount) || newAmount <= 0) {
-//     alert("Please enter a valid amount!");
-//     return;
-//   }
-
-//   try {
-//     const url = `${apiUrl}/${id}`;
-//     console.log(`Updating saving at URL: ${url}`);
-
-//     const response = await fetch(url, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ amount: newAmount }),
-//     });
-
-//     if (!response.ok) {
-//       console.error(`Failed to update saving: ${response.status} ${response.statusText}`);
-//       alert("Failed to update the entry.");
-//       return;
-//     }
-
-//     console.log(`Successfully updated saving with ID: ${id}`);
-//     fetchSavings(apiUrl, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners);
-//   } catch (error) {
-//     console.error("Error updating entry:", error);
-//     alert("Error updating entry.");
-//   }
-// };
-
-
-
-//-------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------
-
-
-// export const editSaving = async (id, currentAmount, apiUrl, fetchSavings, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners) => {
-//   console.log(`editSaving called for ID: ${id}, current amount: ${currentAmount}`); // Debugging line
-
-//   const newAmount = parseFloat(prompt(`Edit amount (current: ${currentAmount}):`, currentAmount));
-//   console.log(`New amount entered: ${newAmount}`); // Debugging line
-
-//   if (isNaN(newAmount) || newAmount <= 0) {
-//     alert("Please enter a valid amount!");
-//     return;
-//   }
-
-//   try {
-//     const url = `${apiUrl}/${id}`;
-//     console.log(`Sending PUT request to URL: ${url} with new amount: ${newAmount}`); // Debugging line
-
-//     const response = await fetch(url, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ amount: newAmount }),
-//     });
-
-//     if (!response.ok) {
-//       console.error(`Failed to update saving: ${response.status} ${response.statusText}`);
-//       alert("Failed to update the entry.");
-//       return;
-//     }
-
-//     console.log(`Successfully updated saving with ID: ${id}`); // Debugging line
-//     fetchSavings(apiUrl, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners);
-//   } catch (error) {
-//     console.error("Error updating entry:", error);
-//     alert("Error updating entry.");
-//   }
-// };
-
-
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
-
-
-
-
-
-// export const editSaving = async (id, currentAmount, apiUrl, fetchSavings, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners) => {
-//   console.log(`editSaving called with ID: "${id}" and current amount: ${currentAmount}`); // Debugging line
-
-//   const newAmount = parseFloat(prompt(`Edit amount (current: ${currentAmount}):`, currentAmount));
-//   console.log(`New amount entered: ${newAmount}`); // Debugging line
-
-//   if (isNaN(newAmount) || newAmount <= 0) {
-//     alert("Please enter a valid amount!");
-//     return;
-//   }
-
-//   try {
-//     const url = `${apiUrl}/${id}`;
-//     console.log(`Sending PUT request to URL: "${url}" with new amount: ${newAmount}`); // Debugging line
-
-//     const response = await fetch(url, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ amount: newAmount }),
-//     });
-
-//     if (!response.ok) {
-//       console.error(`Failed to update saving: ${response.status} ${response.statusText}`);
-//       alert("Failed to update the entry.");
-//       return;
-//     }
-
-//     console.log(`Successfully updated saving with ID: ${id}`);
-//     fetchSavings(apiUrl, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners);
-//   } catch (error) {
-//     console.error("Error updating entry:", error);
-//     alert("Error updating entry.");
-//   }
-// };
-
-
-
-
-//-------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------
-
-
-export const editSaving = async (id, currentAmount, apiUrl, fetchSavings, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners) => {
-  console.log(`editSaving called with ID: "${id}" and current amount: ${currentAmount}`);
-
-  const newAmount = parseFloat(prompt(`Edit amount (current: ${currentAmount}):`, currentAmount));
-  console.log(`New amount entered: ${newAmount}`);
-
-  if (isNaN(newAmount) || newAmount <= 0) {
-    alert("Please enter a valid amount!");
-    return;
-  }
-
-  try {
-    const url = `${apiUrl}/${id}`;
-    console.log(`Sending PUT request to URL: "${url}" with new amount: ${newAmount}`);
-
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: newAmount }),
-    });
-
-    if (!response.ok) {
-      console.error(`Failed to update saving: ${response.status} ${response.statusText}`);
-      alert("Failed to update the entry.");
+    if (!newAmount || isNaN(newAmount) || !newDate || !newToday || !newTime) {
+      alert("Please enter valid values for all fields.");
       return;
     }
 
-    console.log(`Successfully updated saving with ID: ${id}`);
-    // Re-fetch and re-render the table
-    fetchSavings(apiUrl, tableBodyEl, totalAmountEl, attachDeleteListeners, attachEditListeners);
-  } catch (error) {
-    console.error("Error updating entry:", error);
-    alert("Error updating entry.");
-  }
+    // Update the entry in the backend
+    try {
+      const response = await fetch(`${apiUrl}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: newAmount,
+          date: newDate,
+          today: newToday,
+          time: moment(newTime, "HH:mm").format("h:mm A"),
+        }),
+      });
+
+      if (response.ok) {
+        // Update the table with new values
+        amountCell.textContent = newAmount;
+        dateCell.textContent = newDate;
+        todayCell.textContent = newToday;
+        timeCell.textContent = moment(newTime, "HH:mm").format("h:mm A");
+        saveBtn.replaceWith(button);
+      } else {
+        alert("Failed to update the entry.");
+      }
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      alert("Error updating entry.");
+    }
+  });
 };
-
-
-
-
-
-// export const editSaving = async (id, amount) => {
-//   console.log(`editSaving called for ID: ${id} with amount: ${amount}`);
-//   alert(`Editing ID: ${id} with amount: ${amount}`); // Temporary for testing
-// };

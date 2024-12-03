@@ -1,25 +1,23 @@
-// this one is working
-
-import moment from 'moment';
+// import moment from 'moment';
+import convertTo12 from './convertTime.js';
 
 const fetchSavings = async () => {
   try {
-    console.log("Fetching savings...");
     const response = await fetch(apiUrl);
-    console.log("Response:", response);
     const data = await response.json();
-    console.log("Fetched data:", data);
 
-    // Clear the table
-    tableBodyEl.innerHTML = '';
+    tableBodyEl.innerHTML = "";
 
-    // Populate the table
     let runningTotal = 0;
+    // console.log("Processing savings tessssting data...");
+
     data.forEach((saving) => {
+      // console.log(`Processing saving tessssting ID ${saving._id}, time: ${saving.time}`);
       runningTotal += saving.amount;
 
-      // Format the time using Moment.js
-      const formattedTime = moment(saving.time, "HH:mm:ss").format("h:mm A");
+      console.log(`Original time: ${saving.time}`);
+      const formattedTime = convertTo12(saving.time); // Correctly convert time
+      console.log(`Formatted time: ${formattedTime}`);
 
       const row = `
         <tr>
@@ -27,21 +25,28 @@ const fetchSavings = async () => {
           <td>${runningTotal - saving.amount}</td>
           <td>${runningTotal}</td>
           <td>${saving.date}</td>
-          <td>${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}</td>
-          <td>${formattedTime}</td>
+          <td>${saving.today}</td>
+          <td>${formattedTime}</td> <!-- Ensure this is used -->
           <td>
-            <button class="edit-btn" data-id="${saving._id}" data-amount="${saving.amount}">Edit</button>
+            <button class="edit-btn" 
+                    data-id="${saving._id}" 
+                    data-amount="${saving.amount}" 
+                    data-date="${saving.date}" 
+                    data-today="${saving.today}" 
+                    data-time="${saving.time}">Edit</button>
             <button class="delete-btn" data-id="${saving._id}">Delete</button>
           </td>
         </tr>
       `;
-      tableBodyEl.innerHTML += row;
+      console.log(`Row for saving to tessssst the formatting time ID ${saving._id}:`, row); // Log the full row
+      tableBodyEl.innerHTML = ""; // Clear the table first
+      tableBodyEl.innerHTML += row; // Add the updated row
+
+      // tableBodyEl.innerHTML += row;
     });
 
-    // Update Total Amount
     totalAmountEl.textContent = `Total Amount: ${runningTotal}`;
 
-    // Attach Delete and Edit Listeners
     attachDeleteListeners();
     attachEditListeners();
   } catch (error) {
@@ -51,8 +56,5 @@ const fetchSavings = async () => {
 };
 
 
-
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
 
 

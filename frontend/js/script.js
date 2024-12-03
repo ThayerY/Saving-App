@@ -1,32 +1,31 @@
-// this one is working
+import convertTo12 from './convertTime.js';
+
+
 const apiUrl = "http://localhost:5000/api/savings";
 
 // Elements
-const tableBodyEl = document.getElementById('table-body');
-const totalAmountEl = document.getElementById('total-amount');
-const amountInputEl = document.getElementById('amount');
-const addAmountBtn = document.getElementById('add-amount-btn');
-const subtractAmountBtn = document.getElementById('subtract-amount-btn');
+const tableBodyEl = document.getElementById("table-body");
+const totalAmountEl = document.getElementById("total-amount");
+const amountInputEl = document.getElementById("amount");
+const addAmountBtn = document.getElementById("add-amount-btn");
+const subtractAmountBtn = document.getElementById("subtract-amount-btn");
 
 // Fetch and Display Savings
 const fetchSavings = async () => {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
-    // console.log("Fetched savings data:", data);
+    console.log("Fetched savings data:", data);
 
     // Clear the table
-    tableBodyEl.innerHTML = '';
+    tableBodyEl.innerHTML = "";
 
     // Populate the table
     let runningTotal = 0;
     data.forEach((saving) => {
       runningTotal += saving.amount;
-      // Debug: Log the original time value to verify its format
-      // console.log(`Original time from saving: ${saving.time}`);
 
-      // Parse and format the time using Moment.js
-      const formattedTime = moment(saving.time, "HH:mm:ss").format("h:mm A");
+      const formattedTime = convertTo12(saving.time); // Correctly convert time
 
       const row = `
         <tr>
@@ -37,7 +36,12 @@ const fetchSavings = async () => {
           <td>${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}</td>
           <td>${formattedTime}</td>
           <td>
-            <button class="edit-btn" data-id="${saving._id}" data-amount="${saving.amount}">Edit</button>
+            <button class="edit-btn" 
+                    data-id="${saving._id}" 
+                    data-amount="${saving.amount}" 
+                    data-date="${saving.date}" 
+                    data-today="${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}" 
+                    data-time="${saving.time}">Edit</button>
             <button class="delete-btn" data-id="${saving._id}">Delete</button>
           </td>
         </tr>
@@ -66,16 +70,16 @@ const addAmount = async () => {
   }
   try {
     const response = await fetch(apiUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ amount }),
     });
 
     if (response.ok) {
       fetchSavings();
-      amountInputEl.value = ''; // Clear the input
+      amountInputEl.value = ""; // Clear the input
     } else {
       alert("Failed to add amount.");
     }
@@ -94,16 +98,16 @@ const subtractAmount = async () => {
   }
   try {
     const response = await fetch(apiUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ amount: -amount }), // Negative for subtraction
     });
 
     if (response.ok) {
       fetchSavings();
-      amountInputEl.value = ''; // Clear the input
+      amountInputEl.value = ""; // Clear the input
     } else {
       alert("Failed to subtract amount.");
     }
@@ -115,27 +119,115 @@ const subtractAmount = async () => {
 
 // Attach Edit Event Listeners
 const attachEditListeners = () => {
-  const editButtons = document.querySelectorAll('.edit-btn');
-  // console.log(`Attaching edit listeners to ${editButtons.length} buttons.`);
+  const editButtons = document.querySelectorAll(".edit-btn");
   editButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const id = button.dataset.id;
-      const currentAmount = button.dataset.amount;
-      // console.log(`Edit button clicked for ID: ${id} with amount: ${currentAmount}`);
-      editSaving(id, currentAmount); // Call the edit functionality
+    button.addEventListener("click", () => {
+      editSavingInline(button); // Pass the button element to inline edit
     });
   });
 };
 
-// Delete Saving
+// Edit Saving Inline
+const editSavingInline = (button) => {
+  const id = button.dataset.id;
+  const row = button.closest("tr");
+
+  // Get current values from the row
+  const amountCell = row.children[0];
+  const dateCell = row.children[3];
+  const todayCell = row.children[4];
+  const timeCell = row.children[5];
+
+  // Create input fields for editing
+  const amountInput = document.createElement("input");
+  amountInput.type = "number";
+  amountInput.value = amountCell.textContent.trim();
+  amountInput.className = "edit-input";
+
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  dateInput.value = dateCell.textContent.trim();
+  dateInput.className = "edit-date-input";
+
+  const todayInput = document.createElement("input");
+  todayInput.type = "text";
+  todayInput.value = todayCell.textContent.trim();
+  todayInput.className = "edit-today-input";
+
+  const timeInput = document.createElement("input");
+  timeInput.type = "time";
+  timeInput.value = moment(timeCell.textContent.trim(), "h:mm A").format("HH:mm");
+  timeInput.className = "edit-time-input";
+
+  // Replace cell content with input fields
+  amountCell.innerHTML = "";
+  dateCell.innerHTML = "";
+  todayCell.innerHTML = "";
+  timeCell.innerHTML = "";
+
+  amountCell.appendChild(amountInput);
+  dateCell.appendChild(dateInput);
+  todayCell.appendChild(todayInput);
+  timeCell.appendChild(timeInput);
+
+  // Change Edit button to Save button
+  const saveBtn = document.createElement("button");
+  saveBtn.textContent = "Save";
+  saveBtn.className = "save-btn";
+  button.replaceWith(saveBtn);
+
+  // Save changes
+  saveBtn.addEventListener("click", async () => {
+    const newAmount = parseFloat(amountInput.value);
+    const newDate = dateInput.value;
+    const newToday = todayInput.value;
+    const newTime = timeInput.value;
+
+    if (!newAmount || isNaN(newAmount) || !newDate || !newToday || !newTime) {
+      alert("Please enter valid values for all fields.");
+      return;
+    }
+
+    // Ensure time is sent in 12-hour format
+    const formattedTime = moment(newTime, "HH:mm").format("h:mm A");
+
+    try {
+      const response = await fetch(`${apiUrl}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: newAmount,
+          date: newDate,
+          today: newToday,
+          time: formattedTime,
+        }),
+      });
+
+      if (response.ok) {
+        fetchSavings(); // Refresh the table after saving
+      } else {
+        alert("Failed to update the entry.");
+      }
+    } catch (error) {
+      console.error("Error updating entry:", error);
+      alert("Error updating entry.");
+    }
+  });
+
+
+};
+
+// Attach Delete Event Listeners
 const attachDeleteListeners = () => {
-  const deleteButtons = document.querySelectorAll('.delete-btn');
+  const deleteButtons = document.querySelectorAll(".delete-btn");
   deleteButtons.forEach((button) => {
-    button.addEventListener('click', async () => {
+    button.addEventListener("click", async () => {
       const id = button.dataset.id;
       try {
         const response = await fetch(`${apiUrl}/${id}`, {
-          method: 'DELETE',
+          method: "DELETE",
         });
 
         if (response.ok) {
@@ -151,40 +243,9 @@ const attachDeleteListeners = () => {
   });
 };
 
-// Edit Saving
-const editSaving = async (id, currentAmount) => {
-  const newAmount = parseFloat(prompt(`Edit amount (current: ${currentAmount}):`, currentAmount));
-
-  if (isNaN(newAmount) || newAmount <= 0) {
-    alert("Please enter a valid amount.");
-    return;
-  }
-  try {
-    const response = await fetch(`${apiUrl}/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: newAmount }),
-    });
-
-    if (response.ok) {
-      console.log(`Saving updated successfully with ID: ${id}`);
-      fetchSavings(); // Refresh the table
-    } else {
-      alert("Failed to update the entry.");
-    }
-  } catch (error) {
-    console.error("Error updating entry:", error);
-    alert("Error updating entry.");
-  }
-};
-
-// console.log("Testing Moment.js:", moment().format("YYYY-MM-DD HH:mm:ss"));
-
 // Event Listeners
-addAmountBtn.addEventListener('click', addAmount);
-subtractAmountBtn.addEventListener('click', subtractAmount);
+addAmountBtn.addEventListener("click", addAmount);
+subtractAmountBtn.addEventListener("click", subtractAmount);
 
 // Initial Fetch
 fetchSavings();
