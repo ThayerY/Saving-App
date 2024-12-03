@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
 
 // GET: Fetch all savings
 router.get("/", async (req, res) => {
-  console.log("GET /api/savings called");
+  // console.log("GET /api/savings called");
   try {
     const savings = await Saving.find();
     res.json(savings);
@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
 
 // DELETE: Remove a saving by ID
 router.delete("/:id", async (req, res) => {
-  console.log("GET /api/savings called");
+  // console.log("GET /api/savings called");
   try {
     const { id } = req.params;
     const deletedSaving = await Saving.findByIdAndDelete(id);
@@ -66,7 +66,7 @@ router.delete("/:id", async (req, res) => {
 
 // PUT: Update a saving by ID
 router.put("/:id", async (req, res) => {
-  console.log("GET /api/savings called");
+  // console.log("GET /api/savings called");
   try {
     const { id } = req.params;
     const { amount } = req.body;
