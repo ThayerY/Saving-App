@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import savingsRoutes from "./routes/savings.js"; // Import savings routes (with .js extension)
-
+import convertTo12 from "./routes/convertTime.js";
 dotenv.config(); // Load environment variables
 
 const app = express();
