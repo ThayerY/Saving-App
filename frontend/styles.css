@@ -30,8 +30,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-
-/* start */
+/* Input Section */
 .input-container {
   display: flex;
   align-items: center;
@@ -44,7 +43,6 @@ h1 {
   padding: 12px 24px;
   font-size: 16px;
   width: 400px;
-
 }
 
 .input-container button {
@@ -73,21 +71,7 @@ h1 {
   background-color: rgb(170, 60, 60);
 }
 
-
-.delete-btn {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.delete-btn:hover {
-  background-color: #ff1a1a;
-}
-
-
+/* Table Styles */
 table {
   width: 100%;
   margin-top: 20px;
@@ -121,6 +105,46 @@ tr:nth-child(even) {
   text-align: center;
 }
 
+/* Buttons in Actions Column */
+td button {
+  display: inline-block;
+  /* Ensure buttons are inline */
+  margin-right: 8px;
+  /* Add spacing between buttons */
+  vertical-align: middle;
+  /* Align buttons to the middle */
+}
+
+.edit-btn {
+  background-color: #4CAF50;
+  /* Green background */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
+  /* Slightly darker green */
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+  /* Red background */
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-btn:hover {
+  background-color: #ff1a1a;
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
   .input-container {
     flex-direction: column;

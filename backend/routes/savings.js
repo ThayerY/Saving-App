@@ -1,6 +1,8 @@
-const express = require("express");
+
+import express from "express";
+import Saving from "../models/Saving.js";
+
 const router = express.Router();
-const Saving = require("../models/Saving");
 
 // POST: Add a new saving
 router.post("/", async (req, res) => {
@@ -34,6 +36,7 @@ router.post("/", async (req, res) => {
 
 // GET: Fetch all savings
 router.get("/", async (req, res) => {
+  console.log("GET /api/savings called");
   try {
     const savings = await Saving.find();
     res.json(savings);
@@ -45,6 +48,7 @@ router.get("/", async (req, res) => {
 
 // DELETE: Remove a saving by ID
 router.delete("/:id", async (req, res) => {
+  console.log("GET /api/savings called");
   try {
     const { id } = req.params;
     const deletedSaving = await Saving.findByIdAndDelete(id);
@@ -60,36 +64,30 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// PUT: Update a saving by ID (for subtracting or adding amount)
+// PUT: Update a saving by ID
 router.put("/:id", async (req, res) => {
+  console.log("GET /api/savings called");
   try {
-    const { id } = req.params; // Extract id from the URL parameter
-    const { amount } = req.body; // Extract the amount from the request body
+    const { id } = req.params;
+    const { amount } = req.body;
 
-    if (!amount || isNaN(amount)) {
-      return res.status(400).json({ message: "Invalid amount." });
+    if (!id || isNaN(amount)) {
+      return res.status(400).json({ error: "Invalid ID or amount." });
     }
 
-    const saving = await Saving.findById(id); // Find the saving by id
-    if (!saving) {
-      return res.status(404).json({ message: "Saving not found." });
+    const updatedSaving = await Saving.findByIdAndUpdate(id, { amount }, { new: true });
+
+    if (!updatedSaving) {
+      return res.status(404).json({ error: "Saving not found." });
     }
 
-    // Adjust the amount (subtract or add based on the sign of the amount)
-    saving.amount += amount;  // Adding or subtracting the amount
-    saving.totalAmount += amount; // Update the totalAmount as well (if applicable)
-
-    const updatedSaving = await saving.save(); // Save the updated saving
-    res.status(200).json(updatedSaving); // Respond with the updated saving
+    res.json(updatedSaving);
   } catch (error) {
-    console.error("Error updating saving:", error.message);
-    res.status(500).json({ error: "Failed to update saving." });
+    console.error("Error updating saving:", error);
+    res.status(500).json({ error: "Server error." });
   }
 });
 
-
-
-module.exports = router;
-
+export default router;
 
 
