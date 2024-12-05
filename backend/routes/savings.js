@@ -19,6 +19,10 @@ router.get("/", async (req, res) => {
   }
 });
 
+
+
+
+
 // POST: Add a new saving
 // router.post("/", async (req, res) => {
 //   try {
@@ -189,6 +193,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: "Server error." });
   }
 });
+
 
 
 // DELETE: Remove a saving by ID
@@ -456,6 +461,14 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ error: "Server error." });
   }
 });
+
+
+
+
+
+
+
+
 
 
 

@@ -82,9 +82,9 @@ const fetchSavings = async () => {
 
       const row = `
         <tr>
-          <td>${saving.amount}</td>
-          <td>${currentAmount}</td>
-          <td>${runningTotal}</td>
+          <td>${saving.amount.toLocaleString()}</td>
+          <td>${currentAmount.toLocaleString()}</td>
+          <td>${runningTotal.toLocaleString()}</td>
           <td>${saving.date}</td>
           <td>${saving.today}</td>
           <td>${saving.time}</td>
@@ -295,9 +295,23 @@ const attachDeleteListeners = () => {
   });
 };
 
-// Event Listeners
-addAmountBtn.addEventListener("click", addAmount);
-subtractAmountBtn.addEventListener("click", subtractAmount);
+// // Event Listeners
+// addAmountBtn.addEventListener("click", addAmount);
+// subtractAmountBtn.addEventListener("click", subtractAmount);
+
+
+
+// Updated Event Listeners with event.preventDefault()
+addAmountBtn.addEventListener("click", (event) => {
+  event.preventDefault(); // Prevent page refresh
+  addAmount(apiUrl, fetchSavings, amountInputEl, tableBodyEl, totalAmountEl, attachDeleteListeners);
+});
+
+subtractAmountBtn.addEventListener("click", (event) => {
+  event.preventDefault(); // Prevent page refresh
+  subtractAmount(apiUrl, fetchSavings, amountInputEl, tableBodyEl, totalAmountEl, attachDeleteListeners);
+});
+
 
 // Initial Fetch
 fetchSavings();
