@@ -11,37 +11,86 @@ const addAmountBtn = document.getElementById("add-amount-btn");
 const subtractAmountBtn = document.getElementById("subtract-amount-btn");
 
 // Fetch and Display Savings
+// const fetchSavings = async () => {
+//   try {
+//     const response = await fetch(apiUrl);
+//     const data = await response.json();
+//     console.log("Fetched savings data:", data);
+
+//     // Clear the table
+//     tableBodyEl.innerHTML = "";
+
+//     // Populate the table
+//     let runningTotal = 0;
+//     data.forEach((saving) => {
+//       runningTotal += saving.amount;
+
+//       const formattedTime = convertTo12(saving.time); // Correctly convert time
+
+//       const row = `
+//         <tr>
+//           <td>${saving.amount}</td>
+//           <td>${runningTotal - saving.amount}</td>
+//           <td>${runningTotal}</td>
+//           <td>${saving.date}</td>
+//           <td>${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}</td>
+//           <td>${formattedTime}</td>
+//           <td>
+//             <button class="edit-btn"
+//                     data-id="${saving._id}"
+//                     data-amount="${saving.amount}"
+//                     data-date="${saving.date}"
+//                     data-today="${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}"
+//                     data-time="${saving.time}">Edit</button>
+//             <button class="delete-btn" data-id="${saving._id}">Delete</button>
+//           </td>
+//         </tr>
+//       `;
+//       tableBodyEl.innerHTML += row;
+//     });
+
+//     // Update Total Amount
+//     totalAmountEl.textContent = `Total Amount: ${runningTotal}`;
+
+//     // Attach Event Listeners
+//     attachDeleteListeners();
+//     attachEditListeners();
+//   } catch (error) {
+//     console.error("Error fetching savings:", error);
+//     alert("Failed to fetch savings.");
+//   }
+// };
+
+// Fetch and Display Savings
 const fetchSavings = async () => {
   try {
     const response = await fetch(apiUrl);
     const data = await response.json();
+
     console.log("Fetched savings data:", data);
 
     // Clear the table
-    tableBodyEl.innerHTML = "";
+    tableBodyEl.innerHTML = '';
 
-    // Populate the table
+    // Populate the table with rows
     let runningTotal = 0;
-    data.forEach((saving) => {
+    data.forEach((saving, index) => {
       runningTotal += saving.amount;
 
-      const formattedTime = convertTo12(saving.time); // Correctly convert time
+      // If it's the only record, set currentAmount to 0
+      const currentAmount = index === 0 && data.length === 1 ? 0 : runningTotal - saving.amount;
 
       const row = `
         <tr>
           <td>${saving.amount}</td>
-          <td>${runningTotal - saving.amount}</td>
+          <td>${currentAmount}</td>
           <td>${runningTotal}</td>
           <td>${saving.date}</td>
-          <td>${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}</td>
-          <td>${formattedTime}</td>
+          <td>${saving.today}</td>
+          <td>${saving.time}</td>
           <td>
-            <button class="edit-btn" 
-                    data-id="${saving._id}" 
-                    data-amount="${saving.amount}" 
-                    data-date="${saving.date}" 
-                    data-today="${new Date(saving.date).toLocaleDateString("en-US", { weekday: "long" })}" 
-                    data-time="${saving.time}">Edit</button>
+            <button class="edit-btn" data-id="${saving._id}" data-amount="${saving.amount}" 
+              data-date="${saving.date}" data-today="${saving.today}" data-time="${saving.time}">Edit</button>
             <button class="delete-btn" data-id="${saving._id}">Delete</button>
           </td>
         </tr>
@@ -49,10 +98,10 @@ const fetchSavings = async () => {
       tableBodyEl.innerHTML += row;
     });
 
-    // Update Total Amount
+    // Update Total Amount Display
     totalAmountEl.textContent = `Total Amount: ${runningTotal}`;
 
-    // Attach Event Listeners
+    // Attach Event Listeners for Edit and Delete Buttons
     attachDeleteListeners();
     attachEditListeners();
   } catch (error) {
@@ -60,6 +109,7 @@ const fetchSavings = async () => {
     alert("Failed to fetch savings.");
   }
 };
+
 
 // Add New Amount
 const addAmount = async () => {

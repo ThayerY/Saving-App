@@ -99,7 +99,182 @@
 
 
 
-// Editting Today field to inserts automatically the day according on date
+// // Editting Today field to inserts automatically the day according on date
+
+// const editSavingInline = (id, currentAmount, currentDate, currentToday, currentTime) => {
+//   const row = document.querySelector(`[data-id="${id}"]`).parentElement.parentElement;
+
+//   // Create input fields for inline editing
+//   const amountInput = document.createElement("input");
+//   amountInput.type = "number";
+//   amountInput.value = currentAmount;
+
+//   const dateInput = document.createElement("input");
+//   dateInput.type = "date";
+//   dateInput.value = currentDate;
+
+//   const timeInput = document.createElement("input");
+//   timeInput.type = "time";
+//   timeInput.value = currentTime;
+
+//   const todayCell = row.children[4];
+//   const saveBtn = document.createElement("button");
+//   saveBtn.textContent = "Save";
+//   saveBtn.className = "save-btn";
+
+//   // Replace the cells with input fields and the save button
+//   row.children[0].innerHTML = "";
+//   row.children[3].innerHTML = "";
+//   row.children[5].innerHTML = "";
+//   row.children[0].appendChild(amountInput);
+//   row.children[3].appendChild(dateInput);
+//   row.children[5].appendChild(timeInput);
+//   row.children[6].replaceChild(saveBtn, row.children[6].children[0]);
+
+//   // Dynamically update the 'Today' field based on the selected date
+//   dateInput.addEventListener("input", () => {
+//     const newDate = new Date(dateInput.value);
+//     const dayOfWeek = newDate.toLocaleDateString("en-US", { weekday: "long" });
+//     todayCell.textContent = dayOfWeek;
+//   });
+
+//   // Save the updated values
+//   saveBtn.addEventListener("click", async () => {
+//     const newAmount = parseFloat(amountInput.value);
+//     const newDate = dateInput.value;
+//     const newTime = timeInput.value;
+//     const newToday = todayCell.textContent; // Get the updated day of the week
+
+//     if (isNaN(newAmount) || newAmount <= 0 || !newDate || !newTime) {
+//       alert("Please enter valid values.");
+//       return;
+//     }
+
+//     console.log("Data being sent to backend:", { newAmount, newDate, newToday, newTime }); // Debug log
+
+//     // Update the backend
+//     try {
+//       const response = await fetch(`${apiUrl}/${id}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           amount: newAmount,
+//           date: newDate,
+//           today: newToday,
+//           time: newTime,
+//         }),
+//       });
+
+//       if (response.ok) {
+//         fetchSavings(); // Refresh the table
+//       } else {
+//         alert("Failed to update the entry.");
+//       }
+//     } catch (error) {
+//       console.error("Error updating entry:", error);
+//       alert("Error updating entry.");
+//     }
+//   });
+// };
+
+
+
+
+
+
+
+
+
+//--------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
+
+
+// today degugging the Today field not showing correctly in databas
+
+
+// const editSavingInline = (id, currentAmount, currentDate, currentToday, currentTime) => {
+//   const row = document.querySelector(`[data-id="${id}"]`).parentElement.parentElement;
+
+//   // Create input fields for inline editing
+//   const amountInput = document.createElement("input");
+//   amountInput.type = "number";
+//   amountInput.value = currentAmount;
+
+//   const dateInput = document.createElement("input");
+//   dateInput.type = "date";
+//   dateInput.value = currentDate;
+
+//   const timeInput = document.createElement("input");
+//   timeInput.type = "time";
+//   timeInput.value = currentTime;
+
+//   const todayCell = row.children[4];
+//   const saveBtn = document.createElement("button");
+//   saveBtn.textContent = "Save";
+//   saveBtn.className = "save-btn";
+
+//   // Replace the cells with input fields and the save button
+//   row.children[0].innerHTML = "";
+//   row.children[3].innerHTML = "";
+//   row.children[5].innerHTML = "";
+//   row.children[0].appendChild(amountInput);
+//   row.children[3].appendChild(dateInput);
+//   row.children[5].appendChild(timeInput);
+//   row.children[6].replaceChild(saveBtn, row.children[6].children[0]);
+
+//   // Dynamically update the 'Today' field based on the selected date
+//   dateInput.addEventListener("input", () => {
+//     const newDate = new Date(dateInput.value);
+//     const dayOfWeek = newDate.toLocaleDateString("en-US", { weekday: "long" });
+//     todayCell.textContent = dayOfWeek;
+//   });
+
+//   // Save the updated values
+//   saveBtn.addEventListener("click", async () => {
+//     const newAmount = parseFloat(amountInput.value);
+//     const newDate = dateInput.value;
+//     const newTime = timeInput.value;
+//     const newToday = todayCell.textContent; // Get the updated day of the week
+
+//     if (isNaN(newAmount) || newAmount <= 0 || !newDate || !newTime) {
+//       alert("Please enter valid values.");
+//       return;
+//     }
+
+//     try {
+//       const response = await fetch(`${apiUrl}/${id}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           amount: newAmount,
+//           date: newDate,
+//           today: newToday, // Ensure this is being sent correctly
+//           time: newTime,
+//         }),
+//       });
+
+//       if (response.ok) {
+//         console.log("Saving updated successfully.");
+//         fetchSavings(); // Refresh the table
+//       } else {
+//         console.error("Failed to update entry:", await response.json());
+//         alert("Failed to update the entry.");
+//       }
+//     } catch (error) {
+//       console.error("Error updating entry:", error);
+//       alert("Error updating entry.");
+//     }
+//   });
+// }
+
+
+
+
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
+
 
 const editSavingInline = (id, currentAmount, currentDate, currentToday, currentTime) => {
   const row = document.querySelector(`[data-id="${id}"]`).parentElement.parentElement;
@@ -117,7 +292,6 @@ const editSavingInline = (id, currentAmount, currentDate, currentToday, currentT
   timeInput.type = "time";
   timeInput.value = currentTime;
 
-  const todayCell = row.children[4];
   const saveBtn = document.createElement("button");
   saveBtn.textContent = "Save";
   saveBtn.className = "save-btn";
@@ -131,19 +305,11 @@ const editSavingInline = (id, currentAmount, currentDate, currentToday, currentT
   row.children[5].appendChild(timeInput);
   row.children[6].replaceChild(saveBtn, row.children[6].children[0]);
 
-  // Dynamically update the 'Today' field based on the selected date
-  dateInput.addEventListener("input", () => {
-    const newDate = new Date(dateInput.value);
-    const dayOfWeek = newDate.toLocaleDateString("en-US", { weekday: "long" });
-    todayCell.textContent = dayOfWeek;
-  });
-
   // Save the updated values
   saveBtn.addEventListener("click", async () => {
     const newAmount = parseFloat(amountInput.value);
     const newDate = dateInput.value;
     const newTime = timeInput.value;
-    const newToday = todayCell.textContent; // Get the updated day of the week
 
     if (isNaN(newAmount) || newAmount <= 0 || !newDate || !newTime) {
       alert("Please enter valid values.");
@@ -158,7 +324,6 @@ const editSavingInline = (id, currentAmount, currentDate, currentToday, currentT
         body: JSON.stringify({
           amount: newAmount,
           date: newDate,
-          today: newToday,
           time: newTime,
         }),
       });
