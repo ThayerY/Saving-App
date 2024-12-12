@@ -9,10 +9,13 @@ body {
   font-family: Arial, sans-serif;
   background-color: #424242;
   color: #333;
+  /* Remove height: 100vh */
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
+  /* Add vertical scroll */
 }
 
 .container {
@@ -32,6 +35,8 @@ h1 {
 
 /* Input Section */
 .input-container {
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,6 +81,7 @@ table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 th,
@@ -83,6 +89,10 @@ td {
   padding: 12px 15px;
   text-align: left;
   border: 1px solid #ddd;
+  vertical-align: middle;
+  word-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 th {
@@ -91,6 +101,9 @@ th {
 
 td {
   background-color: #fff;
+  vertical-align: middle;
+  word-wrap: break-word;
+  /* Add this to handle long words */
 }
 
 tr:nth-child(even) {
@@ -108,11 +121,9 @@ tr:nth-child(even) {
 /* Buttons in Actions Column */
 td button {
   display: inline-block;
-  /* Ensure buttons are inline */
-  margin-right: 8px;
-  /* Add spacing between buttons */
+  /* margin-right: 6px; */
   vertical-align: middle;
-  /* Align buttons to the middle */
+
 }
 
 .edit-btn {
@@ -132,12 +143,21 @@ td button {
 
 .delete-btn {
   background-color: #ff4d4d;
-  /* Red background */
   color: white;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 4px;
+
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+}
+
+td .delete-btn {
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .delete-btn:hover {
@@ -175,7 +195,6 @@ td button {
     font-size: 16px;
   }
 }
-
 
 /* for testing edit button */
 
